@@ -1,86 +1,88 @@
-// Capturar o evento de submit do formulário.
-// addEventListener(param1, função){}
+/**
+ * Selecionar:
+ * input;
+ * botão;
+ * ul
+ */
 
-const form = document.querySelector('#form');
+const inputTarefa = document.querySelector('.input-tarefa');
+const btnTarefa = document.querySelector('.btn-add');
+const ulTarefa = document.querySelector('.tarefas');
 
+function criaLi(){
+    const li = document.createElement('li');
+    return li;
+}
 
-form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const inputPeso = e.target.querySelector('#peso');
-    const inputAltura = e.target.querySelector('#altura');
-    
-    const peso = Number(inputPeso.value);
-    const altura = Number(inputAltura.value);
-    
-    if (!peso) {
-        setResultado('Peso inválido!', false);
-        return; 
-    }
-
-    if(!altura) {
-        setResultado('Altura inválida!', false);
-        return;
+inputTarefa.addEventListener('keypress', function(e){
+    if (e.keyCode === 13){
+        if(!inputTarefa.value) return;
+    criaTarefa(inputTarefa.value);
     }
     
-    // Deve ser feito no evento de submit
-    const imc = getImc(peso, altura);
-    const nivelImc = getNivelImc(imc);
-    console.log(nivelImc);
-    
-    const msg = `Seu IMC é ${imc}: (${nivelImc}).`;
-    setResultado(msg, true);
-    
-    function getImc(peso, altura) {
-        const imc = peso / altura ** 2;
-        return imc.toFixed(2);
+});
+
+function limpaInput(){
+    inputTarefa.value = '';
+    inputTarefa.focus();
+}
+
+function criaBotaoApagar(li){
+    li.innerText += ' ';
+    const botaoApagar = document.createElement('button');
+    botaoApagar.innerText = 'Apagar';
+    // botaoApagar.classList.add('apagar');
+    botaoApagar.setAttribute('class', 'apagar');
+    botaoApagar.setAttribute('title', 'Apagar essa tarefa!')
+    li.appendChild(botaoApagar)
+
+}
+
+function criaTarefa(textoInput){
+    const li = criaLi();
+    li.innerText = textoInput;
+    ulTarefa.appendChild(li);
+    limpaInput();
+    criaBotaoApagar(li)
+    salvarTarefas();
+}
+
+btnTarefa.addEventListener('click', function(){
+    if(!inputTarefa.value) return;
+    criaTarefa(inputTarefa.value);
+});
+
+document.addEventListener('click', function(e){
+    const el = e.target;
+    if(el.classList.contains('apagar')){
+        el.parentElement.remove();
+        salvarTarefas();
     }
 });
 
-function getNivelImc(imc) {
-    const nivel = ['Abaixo do peso', 'Peso Normal', 'Sobrepeso', 'Obesidade I', 'Obesidade II', 'Obesidade III'];
+function salvarTarefas(){
+    // pegar os textos do li..
+    const liTarefas = ulTarefa.querySelectorAll('li');
+    const listaTarefas = [];
 
-    if (imc >= 39.9) {
-        return nivel[5] 
-    } 
-    if (imc >= 34.9) {
-        return nivel[4] 
-    } 
-    if (imc >= 29.9) {
-        return nivel[3] 
-    } 
-    if (imc >= 24.9) {
-        return nivel[2] 
-    } 
-    if (imc >= 18.5) {
-        return nivel[1] 
-    } 
-    if (imc < 18.5){
-        return nivel[0] 
+    for(let tarefa of liTarefas){
+        let tarefaTexto = tarefa.innerText;
+        tarefaTexto = tarefaTexto.replace('Apagar', '').trim();
+        listaTarefas.push(tarefaTexto);
+    }
+    const tarefasJSON = JSON.stringify(listaTarefas);
+    localStorage.setItem('tarefas', tarefasJSON);
+}
+
+function adicionaTarefasSalvas(){
+    const tarefas = localStorage.getItem('tarefas');
+    const listadeTarefas = JSON.parse(tarefas); //
+    for(let tarefa of listadeTarefas){
+        criaTarefa(tarefa);
     }
 }
 
-function setResultado(msg, isValid) {
-    const resultado = document.querySelector('#resultado');
-    resultado.innerHTML = '';
-    
-    const p = criaP();
-
-    if(isValid) {
-        p.classList.add('paragrafo-resultado');
-    } else {
-        p.classList.add('bad');
-
-    }
-
-    p.innerHTML = msg;
-    resultado.appendChild(p);
-
-}
-
-function criaP(){
-    // Criar um elemento em javascript
-    const p = document.createElement('p');
-    // // classList.add
-    return p;
-}
-
+adicionaTarefasSalvas();
+/**
+ * criar botão para apagar as tarefas
+ */
