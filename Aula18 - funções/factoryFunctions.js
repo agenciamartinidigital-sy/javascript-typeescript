@@ -41,7 +41,7 @@ const p3 = criaPessoa('Hélio', 'Martini', 1.80, 80);
 console.log(p1.imc)
 console.log(p2.imc);
 console.log(p3.imc);
-
+ 
 
 
 
