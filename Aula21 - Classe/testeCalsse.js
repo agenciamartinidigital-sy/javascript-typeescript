@@ -8,14 +8,13 @@ class Pessoa {
     }
 
     set nomeCompleto(valor) {
-        valor = valor.split(' ');
-        this.nome = valor.shift();
-        this.sobrenome = valor.join(' ');
+        const partes = valor.trim().split(' ');
+        this.nome = partes.slice(0, 3).join(' ');
+        this.sobrenome = partes.slice(3). join(' ');
     }
 }
 
 const p1 = new Pessoa('Jonice', 'Martini');
-p1.nomeCompleto = 'Jonice Luís Ferreira dos Santos Martini';
+p1.nomeCompleto = 'Jonice Luís Carlos Ferreira dos Santos Martini';
 console.log(p1.nome);
 console.log(p1.sobrenome);
-
