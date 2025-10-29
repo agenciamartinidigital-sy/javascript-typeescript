@@ -1,3 +1,5 @@
+// Promise veio para solucionar o problema da callback
+
 function rand(min, max) {
     min *= 1000;
     max *= 1000;
