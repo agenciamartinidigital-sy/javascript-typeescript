@@ -1,26 +1,10 @@
 const express = require("express");
 const app = express();
+const routes = require('./routes')
 
 app.use(express.urlencoded({ extended: true }))
+app.use(routes);
 
-app.get("/", (req, res) => {
-  res.send(`<form action="/" method="POST">
-        Nome do cliente: <input type="text" name="nome">
-        <button>Olá mundo!</button>
-        </form>`);
-});
-
-app.get("/testes/:idUsers{.:ext}/:parametro{.:ext}", (req, res) => {
-  //{.:ext} opcional
-  console.log(req.params);
-  console.log(req.query);
-  res.send(req.params.idUsers);
-});
-
-app.post("/", (req, res) => {
-  console.log(req.body);
-  res.send(`Recebi o formulário de ${req.body.nome}`);
-});
 
 app.listen(3000, () => {
   console.log("Acessar http://localhost:3000");
