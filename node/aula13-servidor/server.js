@@ -1,9 +1,13 @@
+require('dotenv').config();
+
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
-const connectionString = 'mongodb+srv://luismartini:<Luismmartini060806!>@projetoaula.nqkerhe.mongodb.net/'
-mongoose.connect(connectionString)
-.then()
+mongoose.connect(process.env.CONNECTIONSTRING)
+.then(() => {
+  console.log('Conectei à base de dados')
+  app.emit('pronto')
+}).catch(e => console.log(e));
 
 const routes = require("./routes");
 const path = require("path");
@@ -20,7 +24,11 @@ app.set("view engine", "ejs");
 app.use(middleware);
 app.use(routes);
 
-app.listen(3000, () => {
+app.on('pronto', () => {
+  app.listen(3000, () => {
   console.log("Acessar http://localhost:3000");
   console.log("Servidor executando na porta 3000");
-});
+})
+})
+
+
