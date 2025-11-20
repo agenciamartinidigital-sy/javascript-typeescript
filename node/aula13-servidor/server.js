@@ -1,5 +1,10 @@
 const express = require("express");
 const app = express();
+const mongoose = require('mongoose');
+const connectionString = 'mongodb+srv://luismartini:<Luismmartini060806!>@projetoaula.nqkerhe.mongodb.net/'
+mongoose.connect(connectionString)
+.then()
+
 const routes = require("./routes");
 const path = require("path");
 const middleware = require("./src/middlewares/middleware.js"); // associação via desestruturação
