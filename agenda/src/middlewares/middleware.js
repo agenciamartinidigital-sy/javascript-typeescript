@@ -6,7 +6,7 @@ exports.middlewareGlobal = (req, res, next) => {
 };
 
 exports.checkCSRFError = (err, req, res, next) => {
-  if (err) { //  && err.code === "EBADCSRFTOKEN"
+  if (err && err.code === "EBADCSRFTOKEN") {
     return res.render("404"); // precisa existir views/404.ejs
   }
   next();
