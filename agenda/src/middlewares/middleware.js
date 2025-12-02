@@ -1,12 +1,13 @@
 // src/middlewares/middleware.js
 
 exports.middlewareGlobal = (req, res, next) => {
-  res.locals.umaVariavelLocal = 'Valor da variável';
+  res.locals.errors = req.flash('errors');
+  res.locals.success = req.flash('success');
   next();
 };
 
 exports.checkCSRFError = (err, req, res, next) => {
-  if (err && err.code === "EBADCSRFTOKEN") {
+  if (err) {
     return res.render("404"); // precisa existir views/404.ejs
   }
   next();
